@@ -17,6 +17,4 @@ public class PetNotFoundException extends Exception {
 		// TODO Auto-generated constructor stub
 	}
 
-	
-	
 }

@@ -1,22 +1,29 @@
-package com.tecsup.petclinic.service;
+package com.tecsup.petclinic.services;
 
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import com.tecsup.petclinic.domain.Pet;
+import com.tecsup.petclinic.entities.Pet;
 import com.tecsup.petclinic.exception.PetNotFoundException;
+import com.tecsup.petclinic.services.PetService;
 
 @SpringBootTest
+@RunWith(SpringRunner.class)
+@AutoConfigureTestDatabase(replace = Replace.NONE)
 public class PetServiceTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(PetServiceTest.class);
@@ -33,17 +40,17 @@ public class PetServiceTest {
 		long ID = 1;
 		String NAME = "Leo";
 		Pet pet = null;
-		
+
 		try {
-			
+
 			pet = petService.findById(ID);
-			
+
 		} catch (PetNotFoundException e) {
-			assertThat(e.getMessage(), false);
+			fail(e.getMessage());
 		}
 		logger.info("" + pet);
 
-		assertThat(NAME, is(pet.getName()));
+		assertEquals(NAME, pet.getName());
 
 	}
 
@@ -58,7 +65,7 @@ public class PetServiceTest {
 
 		List<Pet> pets = petService.findByName(FIND_NAME);
 
-		assertThat(SIZE_EXPECTED, is(pets.size()));
+		assertEquals(SIZE_EXPECTED, pets.size());
 	}
 
 	/**
@@ -72,7 +79,7 @@ public class PetServiceTest {
 
 		List<Pet> pets = petService.findByTypeId(TYPE_ID);
 
-		assertThat(SIZE_EXPECTED, is(pets.size()));
+		assertEquals(SIZE_EXPECTED, pets.size());
 	}
 
 	/**
@@ -86,15 +93,14 @@ public class PetServiceTest {
 
 		List<Pet> pets = petService.findByOwnerId(OWNER_ID);
 
-		assertThat(SIZE_EXPECTED, is(pets.size()));
-		
+		assertEquals(SIZE_EXPECTED, pets.size());
 	}
 
 	/**
-	 *  To get ID generate , you need 
-	 *  setup in id primary key in your
-	 *  entity this annotation :
-	 *  	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	 * To get ID generate , you need setup in id primary key in your entity this
+	 * annotation :
+	 * 
+	 * @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 */
 	@Test
 	public void testCreatePet() {
@@ -107,10 +113,10 @@ public class PetServiceTest {
 		pet = petService.create(pet);
 		logger.info("" + pet);
 
-		assertThat(pet.getId(), notNullValue());
-		assertThat(PET_NAME, is(pet.getName()));
-		assertThat(OWNER_ID, is(pet.getOwnerId()));
-		assertThat(TYPE_ID,is(pet.getTypeId()));
+		assertThat(pet.getId()).isNotNull();
+		assertEquals(PET_NAME, pet.getName());
+		assertEquals(OWNER_ID, pet.getOwnerId());
+		assertEquals(TYPE_ID, pet.getTypeId());
 
 	}
 
@@ -147,11 +153,11 @@ public class PetServiceTest {
 		Pet upgradePet = petService.update(readPet);
 		logger.info(">>>>" + upgradePet);
 
-		assertThat(create_id ,notNullValue());
-		assertThat(create_id, is(upgradePet.getId()));
-		assertThat(UP_PET_NAME, is(upgradePet.getName()));
-		assertThat(UP_OWNER_ID, is(upgradePet.getTypeId()));
-		assertThat(UP_TYPE_ID, is(upgradePet.getOwnerId()));
+		assertThat(create_id).isNotNull();
+		assertEquals(create_id, upgradePet.getId());
+		assertEquals(UP_PET_NAME, upgradePet.getName());
+		assertEquals(UP_OWNER_ID, upgradePet.getTypeId());
+		assertEquals(UP_TYPE_ID, upgradePet.getOwnerId());
 	}
 
 	/**
@@ -171,15 +177,15 @@ public class PetServiceTest {
 		try {
 			petService.delete(pet.getId());
 		} catch (PetNotFoundException e) {
-			assertThat(e.getMessage(), false);
+			fail(e.getMessage());
 		}
-			
+
 		try {
 			petService.findById(pet.getId());
-			assertThat(true, is(false));
+			assertTrue(false);
 		} catch (PetNotFoundException e) {
-			assertThat(true, is(true));
-		} 				
+			assertTrue(true);
+		}
 
 	}
 }

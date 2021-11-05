@@ -1,4 +1,4 @@
-package com.tecsup.petclinic.domain;
+package com.tecsup.petclinic.entities;
 
 import java.sql.Date;
 
@@ -25,7 +25,7 @@ public class Pet {
 	@Column(name = "owner_id")
 	private int ownerId;
 	private Date birth_date;
-	
+
 	public Pet() {
 	}
 
@@ -81,6 +81,5 @@ public class Pet {
 		return "Pet [id=" + id + ", name=" + name + ", typeId=" + typeId + ", ownerId=" + ownerId + ", birth_date="
 				+ birth_date + "]";
 	}
-
 
 }

@@ -1,4 +1,4 @@
-package com.tecsup.petclinic.service;
+package com.tecsup.petclinic.services;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tecsup.petclinic.domain.Pet;
-import com.tecsup.petclinic.domain.PetRepository;
+import com.tecsup.petclinic.entities.Pet;
 import com.tecsup.petclinic.exception.PetNotFoundException;
+import com.tecsup.petclinic.repositories.PetRepository;
 
 /**
  * 
@@ -45,14 +45,13 @@ public class PetServiceImpl implements PetService {
 		return petRepository.save(pet);
 	}
 
-
 	/**
 	 * 
 	 * @param id
 	 * @throws PetNotFoundException
 	 */
 	@Override
-	public void delete(Long id) throws PetNotFoundException{
+	public void delete(Long id) throws PetNotFoundException {
 
 		Pet pet = findById(id);
 		petRepository.delete(pet);
@@ -69,9 +68,9 @@ public class PetServiceImpl implements PetService {
 
 		Optional<Pet> pet = petRepository.findById(id);
 
-		if ( !pet.isPresent())
+		if (!pet.isPresent())
 			throw new PetNotFoundException("Record not found...!");
-			
+
 		return pet.get();
 	}
 
@@ -126,10 +125,10 @@ public class PetServiceImpl implements PetService {
 	 */
 	@Override
 	public Iterable<Pet> findAll() {
-		
-		// TODO Auto-generated 
+
+		// TODO Auto-generated
 		return petRepository.findAll();
-	
+
 	}
 
 }
